@@ -173,7 +173,7 @@ public class RobotContainer {
     startClimb.whenReleased(shooter::disableForClimb, shooter, climber);
 
     Button rampShooterWithoutGuide = new Button(() -> switchbox.rampShooter() && !switchbox.guide());
-    rampShooterWithoutGuide.whenPressed(new RampShooter(() -> -2000));
+    rampShooterWithoutGuide.whenPressed(new RampShooter(() -> -3000));
 
     Button rampShooterWithGuide = new Button(() -> switchbox.rampShooter() && switchbox.guide());
     rampShooterWithGuide.whenPressed(new RampShooter(() -> -3800));
@@ -193,11 +193,11 @@ public class RobotContainer {
 
     Button manualShoot = new Button(() -> switchbox.shoot() && !switchbox.guide() && switchbox.shooterOverride());
     manualShoot.whenPressed(
-      new RampShooter(() -> -2000)
+      new RampShooter(() -> -2800)
       .alongWith(new HoldHoodAngle())
       .andThen(
-        new Shoot(() -> -2000)
-        .alongWith(new SetIndexer(0.65, () -> -2000))
+        new Shoot(() -> -2800)
+        .alongWith(new SetIndexer(0.65, () -> -2800))
       )
     );
     
@@ -354,6 +354,18 @@ public class RobotContainer {
         autonCommand = AutoCommands.groupBBlue();
       break;
 
+      case 4:
+        autonCommand = AutoCommands.barrelRun();
+      break;
+
+      case 5:
+        autonCommand = AutoCommands.bounce();
+      break;
+
+      case 6:
+        autonCommand = AutoCommands.slalom();
+      break;
+
       default:
       autonCommand = null;
     }
@@ -377,6 +389,18 @@ public class RobotContainer {
 
       case 3:
         startPose = new Pose2d(0.3, 2.286, Rotation2d.fromDegrees(0));
+      break;
+
+      case 4:
+        startPose = new Pose2d(1.288, 2.286, Rotation2d.fromDegrees(0));
+      break;
+
+      case 5:
+        startPose = new Pose2d(1.288, 2.286, Rotation2d.fromDegrees(0));
+      break;
+      
+      case 6:
+        startPose = new Pose2d(1.288, 2.286, Rotation2d.fromDegrees(0));
       break;
 
       default:

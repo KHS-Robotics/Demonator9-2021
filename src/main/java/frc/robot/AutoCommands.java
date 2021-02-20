@@ -9,12 +9,18 @@ package frc.robot;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -34,26 +40,34 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 public class AutoCommands {
   private static boolean initialized = false;
   //public static SwerveControllerCommand wallLineUp, frontTrench, pickTrench, returnTrench, moveOffInit, steal, moveFromSteal, pick3Rendevous, shootFromRendevous;
-  public static SwerveControllerCommand test, RedAStart, RedAOne, RedATwo, RedAEnd;
+  public static SwerveControllerCommand test, redAStart, redAOne, redATwo, redAEnd, bounce, barrel, slalom;
+  public static Trajectory testTrajectory;
+  public static TrajectoryConfig config = new TrajectoryConfig(3.0, 6.0);
 
   public static void autoInit() {
     if(!initialized) {
       new Thread(() -> {
-        RedAStart = loadPathweaverTrajectory("RedAStart");
-        RedAOne = loadPathweaverTrajectory("RedAC3toD5");
-        RedATwo = loadPathweaverTrajectory("RedAD5toA6");
-        RedAEnd = loadPathweaverTrajectory("RedAEnd");
+        redAStart = loadPathweaverTrajectory("RedAStart");
+        redAOne = loadPathweaverTrajectory("RedAC3toD5");
+        redATwo = loadPathweaverTrajectory("RedAD5toA6");
+        redAEnd = loadPathweaverTrajectory("RedAEnd");
+
+        bounce = loadPathweaverTrajectory("Bounce");
+        barrel = loadPathweaverTrajectory("Barrel");
+        slalom = loadPathweaverTrajectory("Slalom");
 
         test = loadPathweaverTrajectory("Test");
-        /* wallLineUp = loadPathweaverTrajectory("WallLineUp");
-        // frontTrench = loadPathweaverTrajectory("FrontOffset");
-        // pickTrench = loadPathweaverTrajectory("Trench");
-        // returnTrench = loadPathweaverTrajectory("ReturnFromLastBall");
-        // moveOffInit = loadPathweaverTrajectory("MoveOffInit");
-        // steal = loadPathweaverTrajectory("Steal");
-        // moveFromSteal = loadPathweaverTrajectory("MoveFromSteal");
-        // pick3Rendevous = loadPathweaverTrajectory("Pickup3Rendezvous");
-        // shootFromRendevous = loadPathweaverTrajectory("MoveFromRendevous3"); */
+        
+        config.setKinematics(RobotContainer.swerveDrive.kinematics);
+
+        var start = new Pose2d(1.288, -2.286, Rotation2d.fromDegrees(0));
+        var end = new Pose2d(4, -2.286, Rotation2d.fromDegrees(0));
+
+        var interiorPoints = new ArrayList<Translation2d>();
+        interiorPoints.add(new Translation2d(2.6, -4));
+
+        testTrajectory = TrajectoryGenerator.generateTrajectory(start, interiorPoints, end, config);
+
       }).start();
 
       initialized = true;
@@ -83,52 +97,26 @@ public class AutoCommands {
       );
   }
 
-  /* public static Command sixBallAuto()  {
-  //   return 
-  //     wallLineUp
-  //     .andThen(new RotateToTarget().alongWith(new AlignHoodToTarget()).alongWith(new RampShooter(() -> -3000)))
-  //     .andThen(new ShootAuto(() -> -3000).alongWith(new SetIndexerAuto(0.65, () -> -3000)).alongWith(new RotateToTarget()).withTimeout(5))
-  //     .andThen(frontTrench.withTimeout(3.5))
-  //     .andThen(pickTrench)
-  //     .andThen(returnTrench)//.alongWith(new WaitCommand(0.5))?
-  //     .andThen(new RotateToTarget().alongWith(new AlignHoodToTarget()))  
-  //     .andThen(new ShootAuto(() -> -3000).alongWith(new SetIndexerAuto(0.65, () -> -3000)).alongWith(new RotateToTarget()).withTimeout(5));
-  // }
-
-  // public static Command shootOffInit()  {
-  //   return 
-  //     new RotateToTarget().alongWith(new AlignHoodToTarget()).alongWith(new RampShooter(() -> -3000))
-  //     .andThen(new ShootAuto(() -> -2800).alongWith(new SetIndexerAuto(0.65, () -> -3000)).alongWith(new RotateToTarget()).withTimeout(5))
-  //     .andThen(moveOffInit);
-  // }
-
-  // public static Command steal8BallAuto()  {
-  //   return `
-  //     steal
-  //     .andThen(moveFromSteal)
-  //     .andThen(new RotateToTarget().alongWith(new AlignHoodToTarget()).alongWith(new RampShooter(() -> -3000)))
-  //     .andThen(new ShootAuto(() -> -3000).alongWith(new SetIndexerAuto(0.65, () -> -3000)).alongWith(new RotateToTarget()).withTimeout(5))
-  //     .andThen(pick3Rendevous)
-  //     .andThen(shootFromRendevous)
-  //     .andThen(new RotateToTarget().alongWith(new AlignHoodToTarget()).alongWith(new RampShooter(() -> -3000)))
-  //     .andThen(new ShootAuto(() -> -3000).alongWith(new SetIndexerAuto(0.65, () -> -3000)).alongWith(new RotateToTarget()).withTimeout(5));
-  // }
-
-  // public static Command steal5BallAuto()  {
-  //   return 
-  //     steal
-  //     .andThen(moveFromSteal)
-  //     .andThen(new RotateToTarget().alongWith(new AlignHoodToTarget()).alongWith(new RampShooter(() -> -3000)))
-  //     .andThen(new ShootAuto(() -> -3000).alongWith(new SetIndexerAuto(0.65, () -> -3000)).alongWith(new RotateToTarget()).withTimeout(5));
-  // } */
-
+  public static SwerveControllerCommand getCommandFromTrajectory(Trajectory trajectory) {
+    return new SwerveControllerCommand(
+        trajectory,
+        RobotContainer.swerveDrive::getPose,
+        RobotContainer.swerveDrive.kinematics,
+        // Position controllers
+        new PIDController(0.90, 0.001, 0.30), // x (forward/backwards)
+        new PIDController(0.90, 0.001, 0.30), // y (side to side)
+        new ProfiledPIDController(1.75, 0.001, 0.40, new TrapezoidProfile.Constraints(Math.PI, Math.PI)), // theta (rotation)
+        RobotContainer.swerveDrive::setModuleStates,
+        RobotContainer.swerveDrive
+      );
+  }
 
   public static Command groupARed() {
     return
-      RedAStart
-      .andThen(RedAOne)
-      .andThen(RedATwo)
-      .andThen(RedAEnd);
+      redAStart
+      .andThen(redAOne)
+      .andThen(redATwo)
+      .andThen(redAEnd);
   }
 
   public static Command groupABlue() {
@@ -152,5 +140,18 @@ public class AutoCommands {
   //       .andThen(groupBBlue)
   //       .andThen(endGroupBBlue);
     return null;
+  }
+
+  public static Command barrelRun() {
+    //return getCommandFromTrajectory(testTrajectory);
+    return barrel;
+  }
+
+  public static Command bounce() {
+    return bounce;
+  }
+
+  public static Command slalom() {
+    return slalom;
   }
 }

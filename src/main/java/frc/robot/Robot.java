@@ -54,6 +54,8 @@ public class Robot extends TimedRobot {
     RobotContainer.CPManipulator.brakeMode(false);
     SwerveDrive.kMaxSpeed = 3.5;
     SwerveDrive.kMaxAngularSpeed = Math.PI;
+
+    autonCommand = null;
   }
 
   @Override
@@ -87,17 +89,16 @@ public class Robot extends TimedRobot {
     RobotContainer.swerveDrive.resetNavx(robotContainer.getStartingPose(id));
 
     //RobotContainer.shooter.setShooter(-3000);
-    RobotContainer.intake.intake();
+    //RobotContainer.intake.intake();
     
-    Command putIntakeDown = new InstantCommand(() -> RobotContainer.intake.down())
-    .andThen(new WaitCommand(.5)
-    .andThen(() -> RobotContainer.intake.setOff()));
+    // Command putIntakeDown = new InstantCommand(() -> RobotContainer.intake.down())
+    // .andThen(new WaitCommand(.5)
+    // .andThen(() -> RobotContainer.intake.setOff()));
 
     RobotContainer.indexer.setNumBalls(0);
 
     Command desiredAuton = 
       robotContainer.getAutonomousCommand(id)
-      .alongWith(putIntakeDown)
       .andThen(() -> {
         RobotContainer.swerveDrive.stop();
         RobotContainer.shooter.stop();
