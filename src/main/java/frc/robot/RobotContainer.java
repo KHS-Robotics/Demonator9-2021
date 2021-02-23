@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -49,6 +50,7 @@ import frc.robot.subsystems.SwerveDrive;
 import frc.robot.vision.Limelight;
 import io.github.pseudoresonance.pixy2api.Pixy2;
 import io.github.pseudoresonance.pixy2api.links.SPILink;
+import frc.robot.commands.drive.rotate.NewTurn;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -156,6 +158,9 @@ public class RobotContainer {
       shooter.setBrake(false);
       servo.set(0.225);
     }, shooter);
+
+    Button testTurn = new Button(() -> xboxController.getBButton());
+    testTurn.whenPressed(new NewTurn(new Translation2d(2, 2)));
 
     Button engagePTO = new Button(() -> switchbox.engagePTO() && RobotState.isOperatorControl() && shooter.canEngagePTO());
     engagePTO.whenPressed(() -> climber.setPTO(true), climber, shooter);
