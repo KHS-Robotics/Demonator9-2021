@@ -30,7 +30,6 @@ public class NewTurn extends CommandBase {
         double frontRightDist = Math.sqrt(frontRightDistX * frontRightDistX + frontRightDiffY * frontRightDiffY);
         /////////////////
 
-        int furthestFromCenterIndex = 0;
         double furthestDist = frontRightDist;
 
         // Top left
@@ -42,7 +41,6 @@ public class NewTurn extends CommandBase {
         double frontLeftDist = Math.sqrt(frontLeftDistX * frontLeftDistX + frontLeftDiffY * frontLeftDiffY);
 
         if (frontLeftDist > furthestDist) {
-            furthestFromCenterIndex = 1;
             furthestDist = frontLeftDist;
         }
         /////////////////
@@ -56,7 +54,6 @@ public class NewTurn extends CommandBase {
         double rearLeftDist = Math.sqrt(rearLeftDistX * rearLeftDistX + rearLeftDiffY * rearLeftDiffY);
 
         if (rearLeftDist > furthestDist) {
-            furthestFromCenterIndex = 2;
             furthestDist = rearLeftDist;
         }
         ///////////////
@@ -70,7 +67,6 @@ public class NewTurn extends CommandBase {
         double rearRightDist = Math.sqrt(rearRightDistX * rearRightDistX + rearRightDiffY * rearRightDiffY);
 
         if (rearRightDist > furthestDist) {
-            furthestFromCenterIndex = 3;
             furthestDist = rearRightDist;
         }
         ///////////////
