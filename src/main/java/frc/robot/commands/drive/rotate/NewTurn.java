@@ -1,10 +1,11 @@
 package frc.robot.commands.drive.rotate;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj2.command.CommandBase; 
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 
 public class NewTurn extends CommandBase {
@@ -25,10 +26,12 @@ public class NewTurn extends CommandBase {
         double frontRightDistX = Math.abs(centerPoint.getX() - RobotContainer.swerveDrive.frontRightLocation.getX());
 
         double frontRightAngle = Math.atan(frontRightDistX / frontRightDiffY) - 90;
+
+        double frontRightDist = Math.sqrt(frontRightDistX * frontRightDistX + frontRightDiffY * frontRightDiffY);
         /////////////////
 
         int furthestFromCenterIndex = 0;
-        double furthestDist = Math.sqrt(frontRightDistX * frontRightDistX + frontRightDiffY * frontRightDiffY);
+        double furthestDist = frontRightDist;
 
         // Top left
         double frontLeftDiffY = Math.abs(currentPose.getY() - RobotContainer.swerveDrive.frontLeftLocation.getY());
@@ -71,23 +74,29 @@ public class NewTurn extends CommandBase {
             furthestDist = rearRightDist;
         }
         ///////////////
-        
+
         Rotation2d frontLeftModuleRot = new Rotation2d(frontLeftAngle);
+        DriverStation.reportWarning("Front left speed: " + frontLeftDist / furthestDist, false);
         SwerveModuleState frontLeftModule = new SwerveModuleState(0, frontLeftModuleRot);
 
         Rotation2d frontRightModuleRot = new Rotation2d(frontRightAngle);
+        DriverStation.reportWarning("Front right speed: " + frontRightDist / furthestDist, false);
         SwerveModuleState frontRightModule = new SwerveModuleState(0, frontRightModuleRot);
 
         Rotation2d rearLeftModuleRot = new Rotation2d(rearLeftAngle);
+        DriverStation.reportWarning("Rear left speed: " + rearLeftDist / furthestDist, false);
         SwerveModuleState rearLeftModule = new SwerveModuleState(0, rearLeftModuleRot);
 
         Rotation2d rearRightModuleRot = new Rotation2d(rearRightAngle);
+        DriverStation.reportWarning("Rear right speed: " + rearRightDist / furthestDist, false);
         SwerveModuleState rearRightModule = new SwerveModuleState(0, rearRightModuleRot);
 
-        RobotContainer.swerveDrive.setModuleStates(new SwerveModuleState[] { frontLeftModule, frontRightModule, rearLeftModule, rearRightModule });
+        RobotContainer.swerveDrive.setModuleStates(
+                new SwerveModuleState[] { frontLeftModule, frontRightModule, rearLeftModule, rearRightModule });
     }
 
-    public Translation2d furthestFromCenter(Translation2d mod1, Translation2d mod2, Translation2d mod3, Translation2d mod4) {
+    public Translation2d furthestFromCenter(Translation2d mod1, Translation2d mod2, Translation2d mod3,
+            Translation2d mod4) {
         double mod1Distance = distanceFromCenter(mod1);
         double mod2Distance = distanceFromCenter(mod2);
         double mod3Distance = distanceFromCenter(mod3);
