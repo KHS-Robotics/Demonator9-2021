@@ -45,7 +45,7 @@ public class AutoCommands {
   public static TrajectoryConfig config = new TrajectoryConfig(3.0, 6.0);
 
   public static void autoInit() {
-    if(!initialized) {
+    // if(!initialized) {
       new Thread(() -> {
         redAStart = loadPathweaverTrajectory("RedAStart");
         redAOne = loadPathweaverTrajectory("RedAC3toD5");
@@ -71,7 +71,7 @@ public class AutoCommands {
       }).start();
 
       initialized = true;
-    }
+   // }
   }
     
   public static SwerveControllerCommand loadPathweaverTrajectory(String json) {
@@ -89,8 +89,8 @@ public class AutoCommands {
         RobotContainer.swerveDrive::getPose,
         RobotContainer.swerveDrive.kinematics,
         // Position controllers
-        new PIDController(0.90, 0.001, 0.30), // x (forward/backwards)
-        new PIDController(0.90, 0.001, 0.30), // y (side to side)
+        new PIDController(0.8, 0.001, 0.5), // x (forward/backwards)
+        new PIDController(0.8, 0.001, 0.5), // y (side to side)
         new ProfiledPIDController(1.75, 0.001, 0.40, new TrapezoidProfile.Constraints(Math.PI, Math.PI)), // theta (rotation)
         RobotContainer.swerveDrive::setModuleStates,
         RobotContainer.swerveDrive
