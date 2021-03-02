@@ -6,7 +6,9 @@ import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpiutil.math.MathUtil;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.SwerveDrive;
 
 public class NewTurn extends CommandBase {
     private Translation2d centerPoint;
@@ -19,76 +21,7 @@ public class NewTurn extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void initialize() {
-        Pose2d currentPose = RobotContainer.swerveDrive.getPose();
-
-        // Top right
-        double frontRightDiffY = Math.abs(currentPose.getY() - RobotContainer.swerveDrive.frontRightLocation.getY());
-        double frontRightDistX = Math.abs(centerPoint.getX() - RobotContainer.swerveDrive.frontRightLocation.getX());
-
-        double frontRightAngle = Math.atan(frontRightDistX / frontRightDiffY) - 90;
-
-        double frontRightDist = Math.sqrt(frontRightDistX * frontRightDistX + frontRightDiffY * frontRightDiffY);
-        /////////////////
-
-        double furthestDist = frontRightDist;
-
-        // Top left
-        double frontLeftDiffY = Math.abs(currentPose.getY() - RobotContainer.swerveDrive.frontLeftLocation.getY());
-        double frontLeftDistX = Math.abs(centerPoint.getX() - RobotContainer.swerveDrive.frontLeftLocation.getX());
-
-        double frontLeftAngle = Math.atan(frontLeftDistX / frontLeftDiffY) - 90;
-
-        double frontLeftDist = Math.sqrt(frontLeftDistX * frontLeftDistX + frontLeftDiffY * frontLeftDiffY);
-
-        if (frontLeftDist > furthestDist) {
-            furthestDist = frontLeftDist;
-        }
-        /////////////////
-
-        // Bottom left
-        double rearLeftDiffY = Math.abs(currentPose.getY() - RobotContainer.swerveDrive.rearLeftLocation.getY());
-        double rearLeftDistX = Math.abs(centerPoint.getX() - RobotContainer.swerveDrive.rearLeftLocation.getX());
-
-        double rearLeftAngle = Math.atan(rearLeftDistX / rearLeftDiffY) - 90;
-
-        double rearLeftDist = Math.sqrt(rearLeftDistX * rearLeftDistX + rearLeftDiffY * rearLeftDiffY);
-
-        if (rearLeftDist > furthestDist) {
-            furthestDist = rearLeftDist;
-        }
-        ///////////////
-
-        // Bottom right
-        double rearRightDiffY = Math.abs(currentPose.getY() - RobotContainer.swerveDrive.rearRightLocation.getY());
-        double rearRightDistX = Math.abs(centerPoint.getX() - RobotContainer.swerveDrive.rearRightLocation.getX());
-
-        double rearRightAngle = Math.atan(rearRightDistX / rearRightDiffY) - 90;
-
-        double rearRightDist = Math.sqrt(rearRightDistX * rearRightDistX + rearRightDiffY * rearRightDiffY);
-
-        if (rearRightDist > furthestDist) {
-            furthestDist = rearRightDist;
-        }
-        ///////////////
-
-        Rotation2d frontLeftModuleRot = new Rotation2d(frontLeftAngle);
-        DriverStation.reportWarning("Front left speed: " + frontLeftDist / furthestDist, false);
-        SwerveModuleState frontLeftModule = new SwerveModuleState(0, frontLeftModuleRot);
-
-        Rotation2d frontRightModuleRot = new Rotation2d(frontRightAngle);
-        DriverStation.reportWarning("Front right speed: " + frontRightDist / furthestDist, false);
-        SwerveModuleState frontRightModule = new SwerveModuleState(0, frontRightModuleRot);
-
-        Rotation2d rearLeftModuleRot = new Rotation2d(rearLeftAngle);
-        DriverStation.reportWarning("Rear left speed: " + rearLeftDist / furthestDist, false);
-        SwerveModuleState rearLeftModule = new SwerveModuleState(0, rearLeftModuleRot);
-
-        Rotation2d rearRightModuleRot = new Rotation2d(rearRightAngle);
-        DriverStation.reportWarning("Rear right speed: " + rearRightDist / furthestDist, false);
-        SwerveModuleState rearRightModule = new SwerveModuleState(0, rearRightModuleRot);
-
-        RobotContainer.swerveDrive.setModuleStates(
-                new SwerveModuleState[] { frontLeftModule, frontRightModule, rearLeftModule, rearRightModule });
+        RobotContainer.swerveDrive.resetPid();
     }
 
     public Translation2d furthestFromCenter(Translation2d mod1, Translation2d mod2, Translation2d mod3,
@@ -121,4 +54,85 @@ public class NewTurn extends CommandBase {
                 .sqrt(Math.pow(point.getX() - centerPoint.getX(), 2) + Math.pow(point.getY() - centerPoint.getY(), 2));
         return distance;
     }
+
+    @Override
+    public void execute() {
+        // Top right
+        double frontRightDiffY = (centerPoint.getY() - RobotContainer.swerveDrive.frontRightLocation.getY());
+        double frontRightDistX = (centerPoint.getX() - RobotContainer.swerveDrive.frontRightLocation.getX());
+
+        double frontRightAngle = Math.atan2(frontRightDiffY, frontRightDistX) - Math.PI/2;
+
+        double frontRightDist = Math.sqrt(frontRightDistX * frontRightDistX + frontRightDiffY * frontRightDiffY);
+        /////////////////
+
+        double furthestDist = frontRightDist;
+
+        // Top left
+        double frontLeftDiffY = (centerPoint.getY() - RobotContainer.swerveDrive.frontLeftLocation.getY());
+        double frontLeftDistX = (centerPoint.getX() - RobotContainer.swerveDrive.frontLeftLocation.getX());
+
+        double frontLeftAngle = Math.atan2(frontLeftDiffY, frontLeftDistX) - Math.PI/2;
+
+        double frontLeftDist = Math.sqrt(frontLeftDistX * frontLeftDistX + frontLeftDiffY * frontLeftDiffY);
+
+        if (frontLeftDist > furthestDist) {
+            furthestDist = frontLeftDist;
+        }
+        /////////////////
+
+        // Bottom left
+        double rearLeftDiffY = (centerPoint.getY() - RobotContainer.swerveDrive.rearLeftLocation.getY());
+        double rearLeftDistX = (centerPoint.getX() - RobotContainer.swerveDrive.rearLeftLocation.getX());
+
+        double rearLeftAngle = Math.atan2(rearLeftDiffY, rearLeftDistX) - Math.PI/2;
+        DriverStation.reportWarning("Rear left angle: " + rearLeftAngle, false);
+
+        double rearLeftDist = Math.sqrt(rearLeftDistX * rearLeftDistX + rearLeftDiffY * rearLeftDiffY);
+
+        if (rearLeftDist > furthestDist) {
+            furthestDist = rearLeftDist;
+        }
+        ///////////////
+
+        // Bottom right
+        double rearRightDiffY = (centerPoint.getY() - RobotContainer.swerveDrive.rearRightLocation.getY());
+        double rearRightDistX = (centerPoint.getX() - RobotContainer.swerveDrive.rearRightLocation.getX());
+
+        double rearRightAngle = Math.atan2(rearRightDiffY, rearRightDistX) - Math.PI/2;
+
+        double rearRightDist = Math.sqrt(rearRightDistX * rearRightDistX + rearRightDiffY * rearRightDiffY);
+
+        if (rearRightDist > furthestDist) {
+            furthestDist = rearRightDist;
+        }
+        ///////////////
+
+        Rotation2d frontLeftModuleRot = new Rotation2d(frontLeftAngle);
+        SwerveModuleState frontLeftModule = new SwerveModuleState(SwerveDrive.kMaxSpeed * (frontLeftDist / furthestDist), frontLeftModuleRot);
+
+        Rotation2d frontRightModuleRot = new Rotation2d(frontRightAngle);
+        SwerveModuleState frontRightModule = new SwerveModuleState(SwerveDrive.kMaxSpeed * (frontRightDist / furthestDist), frontRightModuleRot);
+
+        Rotation2d rearLeftModuleRot = new Rotation2d(rearLeftAngle);
+        SwerveModuleState rearLeftModule = new SwerveModuleState(SwerveDrive.kMaxSpeed * (rearLeftDist / furthestDist), rearLeftModuleRot);
+
+        Rotation2d rearRightModuleRot = new Rotation2d(rearRightAngle);
+        SwerveModuleState rearRightModule = new SwerveModuleState(SwerveDrive.kMaxSpeed * (rearRightDist / furthestDist), rearRightModuleRot);
+
+        RobotContainer.swerveDrive.setModuleStates(
+                new SwerveModuleState[] { frontLeftModule, frontRightModule, rearLeftModule, rearRightModule });
+
+        RobotContainer.swerveDrive.updateOdometry();
+    }
+
+  @Override
+  public void end(boolean interrupted) {
+  }
+
+  // Returns true when the command should end.
+  @Override
+  public boolean isFinished() {
+    return false;
+  }
 }

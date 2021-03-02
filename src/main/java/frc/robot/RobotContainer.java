@@ -159,8 +159,8 @@ public class RobotContainer {
       servo.set(0.225);
     }, shooter);
 
-    Button testTurn = new Button(() -> xboxController.getBButton());
-    testTurn.whenPressed(new NewTurn(new Translation2d(2, 2)));
+    // Button testTurn = new Button(() -> xboxController.getBButton());
+    // testTurn.whileHeld(new NewTurn(new Translation2d(0, 1)));
 
     Button engagePTO = new Button(() -> switchbox.engagePTO() && RobotState.isOperatorControl() && shooter.canEngagePTO());
     engagePTO.whenPressed(() -> climber.setPTO(true), climber, shooter);
