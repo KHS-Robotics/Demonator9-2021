@@ -17,7 +17,6 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -296,7 +295,7 @@ public class RobotContainer {
     lampOn.whenReleased(() -> pixy.setLamp((byte) 0, (byte) 0));
     lampOn.whileHeld(() -> CPManipulator.update());
 
-    Button positionControl = new Button(() -> switchbox.positionControl() && xboxController.getBButton());
+    //Button positionControl = new Button(() -> switchbox.positionControl() && xboxController.getBButton());
 
     Button moveIndexer = new Button(() -> (indexer.getSwitch1() && Math.abs(switchbox.getIndexSpeed()) < 0.05 && !switchbox.shoot()));
     moveIndexer.whenPressed(new IndexBall().withTimeout(2));

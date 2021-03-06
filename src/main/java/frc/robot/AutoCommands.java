@@ -38,7 +38,7 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
  * Class to generate commands for autonomous movement
  */
 public class AutoCommands {
-  private static boolean initialized = false;
+  // private static boolean initialized = false;
   //public static SwerveControllerCommand wallLineUp, frontTrench, pickTrench, returnTrench, moveOffInit, steal, moveFromSteal, pick3Rendevous, shootFromRendevous;
   public static SwerveControllerCommand test, redAStart, redAOne, redATwo, redAEnd, bounce, barrel, slalom;
   public static Trajectory testTrajectory;
@@ -70,7 +70,7 @@ public class AutoCommands {
 
       }).start();
 
-      initialized = true;
+      //initialized = true;
    // }
   }
     
