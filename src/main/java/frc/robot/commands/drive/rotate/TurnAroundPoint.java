@@ -106,17 +106,19 @@ public class TurnAroundPoint extends CommandBase {
         }
         ///////////////
 
+        double speed = SwerveDrive.kMaxSpeed * 0.85;
+
         Rotation2d frontLeftModuleRot = new Rotation2d(frontLeftAngle);
-        SwerveModuleState frontLeftModule = new SwerveModuleState(SwerveDrive.kMaxSpeed * (frontLeftDist / furthestDist), frontLeftModuleRot);
+        SwerveModuleState frontLeftModule = new SwerveModuleState(speed * (frontLeftDist / furthestDist), frontLeftModuleRot);
 
         Rotation2d frontRightModuleRot = new Rotation2d(frontRightAngle);
-        SwerveModuleState frontRightModule = new SwerveModuleState(SwerveDrive.kMaxSpeed * (frontRightDist / furthestDist), frontRightModuleRot);
+        SwerveModuleState frontRightModule = new SwerveModuleState(speed * (frontRightDist / furthestDist), frontRightModuleRot);
 
         Rotation2d rearLeftModuleRot = new Rotation2d(rearLeftAngle);
-        SwerveModuleState rearLeftModule = new SwerveModuleState(SwerveDrive.kMaxSpeed * (rearLeftDist / furthestDist), rearLeftModuleRot);
+        SwerveModuleState rearLeftModule = new SwerveModuleState(speed * (rearLeftDist / furthestDist), rearLeftModuleRot);
 
         Rotation2d rearRightModuleRot = new Rotation2d(rearRightAngle);
-        SwerveModuleState rearRightModule = new SwerveModuleState(SwerveDrive.kMaxSpeed * (rearRightDist / furthestDist), rearRightModuleRot);
+        SwerveModuleState rearRightModule = new SwerveModuleState(speed * (rearRightDist / furthestDist), rearRightModuleRot);
 
         RobotContainer.swerveDrive.setModuleStates(
                 new SwerveModuleState[] { frontLeftModule, frontRightModule, rearLeftModule, rearRightModule });
