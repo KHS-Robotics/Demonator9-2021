@@ -10,10 +10,10 @@ import edu.wpi.first.wpiutil.math.MathUtil;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.SwerveDrive;
 
-public class NewTurn extends CommandBase {
+public class TurnAroundPoint extends CommandBase {
     private Translation2d centerPoint;
 
-    public NewTurn(Translation2d centerPoint) {
+    public TurnAroundPoint(Translation2d centerPoint) {
         addRequirements(RobotContainer.swerveDrive);
         this.centerPoint = centerPoint;
     }

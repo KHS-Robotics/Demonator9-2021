@@ -50,7 +50,7 @@ import frc.robot.subsystems.SwerveDrive;
 import frc.robot.vision.Limelight;
 import io.github.pseudoresonance.pixy2api.Pixy2;
 import io.github.pseudoresonance.pixy2api.links.SPILink;
-import frc.robot.commands.drive.rotate.NewTurn;
+import frc.robot.commands.drive.rotate.TurnAroundPoint;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -160,7 +160,7 @@ public class RobotContainer {
     }, shooter);
 
     // Button testTurn = new Button(() -> xboxController.getBButton());
-    // testTurn.whileHeld(new NewTurn(new Translation2d(0, 1)));
+    // testTurn.whileHeld(new TurnAroundPoint(new Translation2d(0, 1)));
 
     Button engagePTO = new Button(() -> switchbox.engagePTO() && RobotState.isOperatorControl() && shooter.canEngagePTO());
     engagePTO.whenPressed(() -> climber.setPTO(true), climber, shooter);
