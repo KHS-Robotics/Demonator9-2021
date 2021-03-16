@@ -31,11 +31,17 @@ public class DriveSwerveWithXbox extends CommandBase {
     // Get the x speed. We are inverting this because Xbox controllers return
     // negative values when we push forward.
     var xSpeed = RobotContainer.swerveDrive.sensControl(-RobotContainer.xboxController.getY(GenericHID.Hand.kLeft)) * SwerveDrive.kMaxSpeed;
+    if(Math.abs(xSpeed) < 0.05) {
+      xSpeed = 0;
+    }
 
     // Get the y speed or sideways/strafe speed. We are inverting this because
     // we want a positive value when we pull to the left. Xbox controllers
     // return positive values when you pull to the right by default.
     var ySpeed = RobotContainer.swerveDrive.sensControl(-RobotContainer.xboxController.getX(GenericHID.Hand.kLeft)) * SwerveDrive.kMaxSpeed;
+    if(Math.abs(ySpeed) < 0.05) {
+      ySpeed = 0;
+    }
 
     // Get the rate of angular rotation. We are inverting this because we want a
     // positive value when we pull to the left (remember, CCW is positive in

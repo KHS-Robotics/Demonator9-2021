@@ -9,7 +9,7 @@ import frc.robot.RobotContainer;
 
 public class TurnAroundRelativePoint extends TurnAroundPoint {
   /** Creates a new TurnAroundRelativePoint. */
-  public TurnAroundRelativePoint(Translation2d relativePoint) {
-    super(new Translation2d( RobotContainer.swerveDrive.getPose().getX() + relativePoint.getX(), RobotContainer.swerveDrive.getPose().getY() + relativePoint.getY() ));
+  public TurnAroundRelativePoint(Translation2d relativePoint, boolean clockwise) {
+    super(new Translation2d( RobotContainer.swerveDrive.getPose().getX() + relativePoint.getX(), RobotContainer.swerveDrive.getPose().getY() + relativePoint.getY() ), clockwise);
   }
 }

@@ -40,7 +40,7 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 public class AutoCommands {
   // private static boolean initialized = false;
   //public static SwerveControllerCommand wallLineUp, frontTrench, pickTrench, returnTrench, moveOffInit, steal, moveFromSteal, pick3Rendevous, shootFromRendevous;
-  public static SwerveControllerCommand test, redAStart, redAOne, redATwo, redAEnd, bounce, barrel, slalom;
+  public static SwerveControllerCommand test, redAStart, redAOne, redATwo, redAEnd, bounce, barrel, slalom, testA, testB;
   public static Trajectory testTrajectory;
   public static TrajectoryConfig config = new TrajectoryConfig(3.0, 6.0);
 
@@ -67,6 +67,10 @@ public class AutoCommands {
         interiorPoints.add(new Translation2d(2.6, -4));
 
         testTrajectory = TrajectoryGenerator.generateTrajectory(start, interiorPoints, end, config);
+
+        testA = getCommandFromTrajectory(testTrajectory);
+
+        //testB = getCommandFromTrajectory(testTrajectory2);
 
       }).start();
 

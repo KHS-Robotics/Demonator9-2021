@@ -1,25 +1,39 @@
 package frc.robot.commands.drive.rotate;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.SwerveDrive;
 
 public class TurnAroundPoint extends CommandBase {
     private Translation2d centerPoint;
+    protected double finalRot;
+    private boolean clockwise;
 
-    public TurnAroundPoint(Translation2d centerPoint) {
+    Pose2d currentPose;
+    double currentRot;
+
+    public TurnAroundPoint(Translation2d centerPoint, boolean clockwise) {
         addRequirements(RobotContainer.swerveDrive);
         this.centerPoint = centerPoint;
+        this.clockwise = clockwise;
+        finalRot = 800;
+
+        var tab = Shuffleboard.getTab("Swervedrive");
+        tab.addNumber("Current Rot", () -> currentRot);
+        tab.addNumber("Target Rot", () -> finalRot);
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void initialize() {
         RobotContainer.swerveDrive.resetPid();
+
     }
 
     public Translation2d furthestFromCenter(Translation2d mod1, Translation2d mod2, Translation2d mod3,
@@ -55,11 +69,16 @@ public class TurnAroundPoint extends CommandBase {
 
     @Override
     public void execute() {
+        currentPose = RobotContainer.swerveDrive.getPose();
+        currentRot = Math.atan2(centerPoint.getY() - currentPose.getY(),
+                centerPoint.getX() - currentPose.getX());
+
+
         // Top right
         double frontRightDiffY = (centerPoint.getY() - RobotContainer.swerveDrive.frontRightLocation.getY());
         double frontRightDistX = (centerPoint.getX() - RobotContainer.swerveDrive.frontRightLocation.getX());
 
-        double frontRightAngle = Math.atan2(frontRightDiffY, frontRightDistX) - Math.PI/2;
+        double frontRightAngle = Math.atan2(frontRightDiffY, frontRightDistX) - Math.PI / 2;
 
         double frontRightDist = Math.sqrt(frontRightDistX * frontRightDistX + frontRightDiffY * frontRightDiffY);
         /////////////////
@@ -70,7 +89,7 @@ public class TurnAroundPoint extends CommandBase {
         double frontLeftDiffY = (centerPoint.getY() - RobotContainer.swerveDrive.frontLeftLocation.getY());
         double frontLeftDistX = (centerPoint.getX() - RobotContainer.swerveDrive.frontLeftLocation.getX());
 
-        double frontLeftAngle = Math.atan2(frontLeftDiffY, frontLeftDistX) - Math.PI/2;
+        double frontLeftAngle = Math.atan2(frontLeftDiffY, frontLeftDistX) - Math.PI / 2;
 
         double frontLeftDist = Math.sqrt(frontLeftDistX * frontLeftDistX + frontLeftDiffY * frontLeftDiffY);
 
@@ -83,7 +102,7 @@ public class TurnAroundPoint extends CommandBase {
         double rearLeftDiffY = (centerPoint.getY() - RobotContainer.swerveDrive.rearLeftLocation.getY());
         double rearLeftDistX = (centerPoint.getX() - RobotContainer.swerveDrive.rearLeftLocation.getX());
 
-        double rearLeftAngle = Math.atan2(rearLeftDiffY, rearLeftDistX) - Math.PI/2;
+        double rearLeftAngle = Math.atan2(rearLeftDiffY, rearLeftDistX) - Math.PI / 2;
         DriverStation.reportWarning("Rear left angle: " + rearLeftAngle, false);
 
         double rearLeftDist = Math.sqrt(rearLeftDistX * rearLeftDistX + rearLeftDiffY * rearLeftDiffY);
@@ -97,7 +116,7 @@ public class TurnAroundPoint extends CommandBase {
         double rearRightDiffY = (centerPoint.getY() - RobotContainer.swerveDrive.rearRightLocation.getY());
         double rearRightDistX = (centerPoint.getX() - RobotContainer.swerveDrive.rearRightLocation.getX());
 
-        double rearRightAngle = Math.atan2(rearRightDiffY, rearRightDistX) - Math.PI/2;
+        double rearRightAngle = Math.atan2(rearRightDiffY, rearRightDistX) - Math.PI / 2;
 
         double rearRightDist = Math.sqrt(rearRightDistX * rearRightDistX + rearRightDiffY * rearRightDiffY);
 
@@ -106,19 +125,23 @@ public class TurnAroundPoint extends CommandBase {
         }
         ///////////////
 
-        double speed = SwerveDrive.kMaxSpeed * 0.85;
+        double speed = SwerveDrive.kMaxSpeed * 0.85 * (clockwise ? -1 : 1);
 
         Rotation2d frontLeftModuleRot = new Rotation2d(frontLeftAngle);
-        SwerveModuleState frontLeftModule = new SwerveModuleState(speed * (frontLeftDist / furthestDist), frontLeftModuleRot);
+        SwerveModuleState frontLeftModule = new SwerveModuleState(speed * (frontLeftDist / furthestDist),
+                frontLeftModuleRot);
 
         Rotation2d frontRightModuleRot = new Rotation2d(frontRightAngle);
-        SwerveModuleState frontRightModule = new SwerveModuleState(speed * (frontRightDist / furthestDist), frontRightModuleRot);
+        SwerveModuleState frontRightModule = new SwerveModuleState(speed * (frontRightDist / furthestDist),
+                frontRightModuleRot);
 
         Rotation2d rearLeftModuleRot = new Rotation2d(rearLeftAngle);
-        SwerveModuleState rearLeftModule = new SwerveModuleState(speed * (rearLeftDist / furthestDist), rearLeftModuleRot);
+        SwerveModuleState rearLeftModule = new SwerveModuleState(speed * (rearLeftDist / furthestDist),
+                rearLeftModuleRot);
 
         Rotation2d rearRightModuleRot = new Rotation2d(rearRightAngle);
-        SwerveModuleState rearRightModule = new SwerveModuleState(speed * (rearRightDist / furthestDist), rearRightModuleRot);
+        SwerveModuleState rearRightModule = new SwerveModuleState(speed * (rearRightDist / furthestDist),
+                rearRightModuleRot);
 
         RobotContainer.swerveDrive.setModuleStates(
                 new SwerveModuleState[] { frontLeftModule, frontRightModule, rearLeftModule, rearRightModule });
@@ -126,13 +149,14 @@ public class TurnAroundPoint extends CommandBase {
         RobotContainer.swerveDrive.updateOdometry();
     }
 
-  @Override
-  public void end(boolean interrupted) {
-  }
+    @Override
+    public void end(boolean interrupted) {
+    }
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
+    // Returns true when the command should end.
+    @Override
+    public boolean isFinished() {
+
+        return Math.abs(RobotContainer.swerveDrive.getYaw() - finalRot) < 5;
+    }
 }

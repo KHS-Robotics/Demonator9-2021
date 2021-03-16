@@ -51,6 +51,7 @@ import frc.robot.vision.Limelight;
 import io.github.pseudoresonance.pixy2api.Pixy2;
 import io.github.pseudoresonance.pixy2api.links.SPILink;
 import frc.robot.commands.drive.rotate.TurnAroundPoint;
+import frc.robot.commands.drive.rotate.TurnAroundPointArc;
 import frc.robot.commands.drive.rotate.TurnAroundRelativePoint;
 
 /**
@@ -161,7 +162,7 @@ public class RobotContainer {
     }, shooter);
 
     Button testTurn = new Button(() -> xboxController.getBButton());
-    testTurn.whileHeld(new TurnAroundRelativePoint(new Translation2d(0, 1)));
+    testTurn.whenPressed(new TurnAroundPointArc(new Translation2d(0, 1), true, -90));
 
     Button engagePTO = new Button(() -> switchbox.engagePTO() && RobotState.isOperatorControl() && shooter.canEngagePTO());
     engagePTO.whenPressed(() -> climber.setPTO(true), climber, shooter);
