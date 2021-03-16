@@ -40,8 +40,8 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 public class AutoCommands {
   // private static boolean initialized = false;
   //public static SwerveControllerCommand wallLineUp, frontTrench, pickTrench, returnTrench, moveOffInit, steal, moveFromSteal, pick3Rendevous, shootFromRendevous;
-  public static SwerveControllerCommand test, redAStart, redAOne, redATwo, redAEnd, bounce, barrel, slalom, testA, testB;
-  public static Trajectory testTrajectory;
+  public static SwerveControllerCommand test, redAStart, redAOne, redATwo, redAEnd, bounce, barrel, slalom, barrelA, testB;
+  public static Trajectory barrel1;
   public static TrajectoryConfig config = new TrajectoryConfig(3.0, 6.0);
 
   public static void autoInit() {
@@ -60,15 +60,14 @@ public class AutoCommands {
         
         config.setKinematics(RobotContainer.swerveDrive.kinematics);
 
-        var start = new Pose2d(1.288, -2.286, Rotation2d.fromDegrees(0));
-        var end = new Pose2d(4, -2.286, Rotation2d.fromDegrees(0));
+        var start = new Pose2d(1.288, 2.286, Rotation2d.fromDegrees(0));
+        var end = new Pose2d(4, 2.348, Rotation2d.fromDegrees(0));
 
         var interiorPoints = new ArrayList<Translation2d>();
-        interiorPoints.add(new Translation2d(2.6, -4));
+        interiorPoints.add(new Translation2d(2.626, 2.436));
 
-        testTrajectory = TrajectoryGenerator.generateTrajectory(start, interiorPoints, end, config);
-
-        testA = getCommandFromTrajectory(testTrajectory);
+        barrel1 = TrajectoryGenerator.generateTrajectory(start, interiorPoints, end, config);
+        barrelA = getCommandFromTrajectory(barrel1);
 
         //testB = getCommandFromTrajectory(testTrajectory2);
 
