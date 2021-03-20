@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.drive.rotate.TurnAroundPointArc;
 // import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 // import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -156,5 +157,9 @@ public class AutoCommands {
 
   public static Command slalom() {
     return slalom;
+  }
+
+  public static Command barrelRunNew() {
+    return barrelA.andThen(new TurnAroundPointArc(new Translation2d(1,1), true, 360));
   }
 }
