@@ -49,7 +49,7 @@ public class AutoCommands {
     // if(!initialized) {
       new Thread(() -> {
         //redAStart = loadPathweaverTrajectory("RedAStart");
-        redAOne = loadPathweaverTrajectory("RedAC3toD5");
+        /*redAOne = loadPathweaverTrajectory("RedAC3toD5");
         redATwo = loadPathweaverTrajectory("RedAD5toA6");
         redAEnd = loadPathweaverTrajectory("RedAEnd");
 
@@ -71,8 +71,8 @@ public class AutoCommands {
         barrelA = getCommandFromTrajectory(barrel1);
 
         //testB = getCommandFromTrajectory(testTrajectory2);
-
-        redAStart = generatePath(new Pose2d(1, 2.286, Rotation2d.fromDegrees(180)), new Translation2d[] {}, new Pose2d(2.286, 2.246, Rotation2d.fromDegrees(180)));
+          */
+        redAStart = generatePath(new Pose2d(4, 2.286, Rotation2d.fromDegrees(0)), new Translation2d[] {}, new Pose2d(2.714, 2.266, Rotation2d.fromDegrees(0)));
       }).start();
 
       //initialized = true;
@@ -128,7 +128,7 @@ public class AutoCommands {
   }
 
   public static Command groupARed() {
-    return redAStart.andThen(redAOne).andThen(redATwo).andThen(redAEnd);
+    return redAStart; //.andThen(redAOne).andThen(redATwo).andThen(redAEnd);
   }
 
   public static Command groupABlue() {
