@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
+import javax.swing.plaf.RootPaneUI;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.controller.PIDController;
@@ -51,7 +53,7 @@ public class AutoCommands {
         //redAStart = loadPathweaverTrajectory("RedAStart");
         /*redAOne = loadPathweaverTrajectory("RedAC3toD5");
         redATwo = loadPathweaverTrajectory("RedAD5toA6");
-        redAEnd = loadPathweaverTrajectory("RedAEnd");
+        redAEnd = loadPathweaverTrajectory("RedAEnd");*/
 
         bounce = loadPathweaverTrajectory("Bounce");
         barrel = loadPathweaverTrajectory("Barrel");
@@ -71,8 +73,11 @@ public class AutoCommands {
         barrelA = getCommandFromTrajectory(barrel1);
 
         //testB = getCommandFromTrajectory(testTrajectory2);
-          */
-        redAStart = generatePath(new Pose2d(4, 2.286, Rotation2d.fromDegrees(0)), new Translation2d[] {}, new Pose2d(2.714, 2.266, Rotation2d.fromDegrees(0)));
+
+        redAStart = generatePath(new Pose2d(9, 2.286, Rotation2d.fromDegrees(0)), new Translation2d[] {}, new Pose2d(7.714, 2.266, Rotation2d.fromDegrees(0)));
+        redAOne = generatePath(new Pose2d(7.714, 2.66, Rotation2d.fromDegrees(0)), new Translation2d[] {}, new Pose2d(6.248, 1.544, Rotation2d.fromDegrees(-15)));
+        redATwo = generatePath(new Pose2d(6.248, 1.544, Rotation2d.fromDegrees(-15)), new Translation2d[] {}, new Pose2d(5.414, 3.833, Rotation2d.fromDegrees(75)));
+        redAEnd = generatePath(new Pose2d(5.414, 3.833, Rotation2d.fromDegrees(75)), new Translation2d[] {}, new Pose2d(.5, 2.286, Rotation2d.fromDegrees(0)));
       }).start();
 
       //initialized = true;
@@ -128,7 +133,7 @@ public class AutoCommands {
   }
 
   public static Command groupARed() {
-    return redAStart; //.andThen(redAOne).andThen(redATwo).andThen(redAEnd);
+    return redAStart.andThen(redAOne).andThen(redATwo).andThen(redAEnd);
   }
 
   public static Command groupABlue() {
