@@ -48,7 +48,7 @@ public class AutoCommands {
   public static void autoInit() {
     // if(!initialized) {
       new Thread(() -> {
-        redAStart = loadPathweaverTrajectory("RedAStart");
+        //redAStart = loadPathweaverTrajectory("RedAStart");
         redAOne = loadPathweaverTrajectory("RedAC3toD5");
         redATwo = loadPathweaverTrajectory("RedAD5toA6");
         redAEnd = loadPathweaverTrajectory("RedAEnd");
@@ -72,12 +72,24 @@ public class AutoCommands {
 
         //testB = getCommandFromTrajectory(testTrajectory2);
 
+        redAStart = generatePath(new Pose2d(1, 2.286, Rotation2d.fromDegrees(180)), new Translation2d[] {}, new Pose2d(2.286, 2.246, Rotation2d.fromDegrees(180)));
       }).start();
 
       //initialized = true;
    // }
   }
     
+  public static SwerveControllerCommand generatePath(Pose2d start, Translation2d[] mid, Pose2d end) {
+    ArrayList<Translation2d> interiorWaypoints = new ArrayList<Translation2d>();
+
+    for(int i = 0; i < mid.length; i++) {
+      interiorWaypoints.add(mid[i]);
+    }
+
+    return getCommandFromTrajectory(TrajectoryGenerator.generateTrajectory(start, interiorWaypoints, end, config));
+  }
+
+
   public static SwerveControllerCommand loadPathweaverTrajectory(String json) {
       Trajectory trajectory;
       try {
@@ -116,11 +128,7 @@ public class AutoCommands {
   }
 
   public static Command groupARed() {
-    return
-      redAStart
-      .andThen(redAOne)
-      .andThen(redATwo)
-      .andThen(redAEnd);
+    return redAStart.andThen(redAOne).andThen(redATwo).andThen(redAEnd);
   }
 
   public static Command groupABlue() {

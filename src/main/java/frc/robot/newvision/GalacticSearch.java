@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.vision;
+package frc.robot.newvision;
 
 import edu.wpi.first.wpilibj.drive.Vector2d;
 
@@ -20,6 +20,7 @@ public class GalacticSearch {
 
 	static Vector2d[] B2Pos = { new Vector2d(0, 0) };
 	static Vector2d[] B2Scale = { new Vector2d(0, 0) };
+	//[16.0,  135.0,  28.0,  22.0] [243.0,  125.0,  26.0,  20.0] [217.0,  80.0,  30.0,  11.0]
 
 	// compare array lengths, only check with those which are equal
 

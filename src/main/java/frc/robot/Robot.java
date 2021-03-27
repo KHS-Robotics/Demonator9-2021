@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.vision.Limelight.LightMode;
 import frc.robot.commands.CenterSwerveModules;
 import frc.robot.subsystems.SwerveDrive;
@@ -62,6 +64,8 @@ public class Robot extends TimedRobot {
       RobotContainer.hood.stop();
     }
 
+    RobotContainer.pixy.setLamp((byte) 1, (byte) 1);
+
     id = (int) idChooser.getDouble(1);
 
     if(RobotContainer.xboxController.getXButtonPressed()) {
@@ -88,16 +92,16 @@ public class Robot extends TimedRobot {
     RobotContainer.swerveDrive.resetNavx(robotContainer.getStartingPose(id));
 
     //RobotContainer.shooter.setShooter(-3000);
-    //RobotContainer.intake.intake();
+    RobotContainer.intake.intake();
     
-    // Command putIntakeDown = new InstantCommand(() -> RobotContainer.intake.down())
-    // .andThen(new WaitCommand(.5)
-    // .andThen(() -> RobotContainer.intake.setOff()));
+    Command putIntakeDown = new InstantCommand(() -> RobotContainer.intake.down())
+    .andThen(new WaitCommand(.5)
+    .andThen(() -> RobotContainer.intake.setOff()));
 
     RobotContainer.indexer.setNumBalls(0);
 
     Command desiredAuton = 
-      robotContainer.getAutonomousCommand(id)
+      robotContainer.getAutonomousCommand(id).alongWith(putIntakeDown)
       .andThen(() -> {
         RobotContainer.swerveDrive.stop();
         RobotContainer.shooter.stop();

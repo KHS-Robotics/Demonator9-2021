@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -41,6 +42,7 @@ import frc.robot.commands.hood.HoldHoodAngle;
 import frc.robot.commands.hood.SetHoodAngle;
 import frc.robot.commands.shooter.RampShooter;
 import frc.robot.commands.shooter.Shoot;
+import frc.robot.newvision.PixyHelper;
 import frc.robot.subsystems.CPManipulator;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Hood;
@@ -96,6 +98,9 @@ public class RobotContainer {
     servo.set(.225);
     // Configure the button bindings
     configureButtonBindings();
+
+    var tab = Shuffleboard.getTab("Match");
+    tab.addString("Blocks", PixyHelper::getBlocksString);
   }
 
   /**
@@ -145,11 +150,11 @@ public class RobotContainer {
     Button controlPanel = new Button(() -> switchbox.controlPanelOverride() && RobotState.isOperatorControl());
     controlPanel.whileHeld(() -> {
       CPManipulator.spin(switchbox.getControlPanel());
-      // CPManipulator.setPosition(true);
+      CPManipulator.setPosition(true);
     }, CPManipulator);
     controlPanel.whenReleased(() -> {
       CPManipulator.spin(0);
-      // CPManipulator.setPosition(false);
+      CPManipulator.setPosition(false);
     }, CPManipulator);
 
     Button wantsPto = new Button(() -> switchbox.engagePTO()  && RobotState.isOperatorControl());// && RobotContainer.shooter.atSetpoint(0));
@@ -163,7 +168,8 @@ public class RobotContainer {
     }, shooter);
 
     Button testTurn = new Button(() -> xboxController.getBButton());
-    testTurn.whenPressed(new TurnAroundPointArc(new Translation2d(0, 1), true, -90));
+    testTurn.whenPressed(new TurnAroundRelativePoint(new Translation2d(0, 1), false));
+    //testTurn.whenPressed(() -> DriverStation.reportWarning(PixyHelper.getBlocksString(), false));
 
     Button engagePTO = new Button(() -> switchbox.engagePTO() && RobotState.isOperatorControl() && shooter.canEngagePTO());
     engagePTO.whenPressed(() -> climber.setPTO(true), climber, shooter);
@@ -384,7 +390,7 @@ public class RobotContainer {
     Pose2d startPose;
     switch (id) {
       case 0: 
-        startPose = new Pose2d(0.3, 2.286, Rotation2d.fromDegrees(180));
+        startPose = new Pose2d(1, 2.286, Rotation2d.fromDegrees(179));
       break;
 
       case 1:
