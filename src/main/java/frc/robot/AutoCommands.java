@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.drive.rotate.TurnAroundPointArc;
 // import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
@@ -43,7 +44,7 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 public class AutoCommands {
   // private static boolean initialized = false;
   //public static SwerveControllerCommand wallLineUp, frontTrench, pickTrench, returnTrench, moveOffInit, steal, moveFromSteal, pick3Rendevous, shootFromRendevous;
-  public static SwerveControllerCommand test, redAStart, redAOne, redATwo, redAEnd, bounce, barrel, slalom, barrelA, testB;
+  public static SwerveControllerCommand test, redAStart, redAOne, redATwo, redAEnd, blueAStart, blueAOne, blueATwo, blueAEnd, redBStart, redBOne, redBTwo, redBEnd, blueBStart, blueBOne, blueBTwo, blueBEnd, bounce, barrel, slalom, barrelA, testB;
   public static Trajectory barrel1;
   public static TrajectoryConfig config = new TrajectoryConfig(3.0, 6.0);
 
@@ -74,16 +75,30 @@ public class AutoCommands {
 
         //testB = getCommandFromTrajectory(testTrajectory2);
 
-        redAStart = generatePath(new Pose2d(9, 2.286, Rotation2d.fromDegrees(0)), new Translation2d[] {}, new Pose2d(7.714, 2.266, Rotation2d.fromDegrees(0)));
-        redAOne = generatePath(new Pose2d(7.714, 2.66, Rotation2d.fromDegrees(0)), new Translation2d[] {}, new Pose2d(6.248, 1.544, Rotation2d.fromDegrees(-15)));
-        redATwo = generatePath(new Pose2d(6.248, 1.544, Rotation2d.fromDegrees(-15)), new Translation2d[] {}, new Pose2d(5.414, 3.833, Rotation2d.fromDegrees(75)));
-        redAEnd = generatePath(new Pose2d(5.414, 3.833, Rotation2d.fromDegrees(75)), new Translation2d[] {}, new Pose2d(.5, 2.286, Rotation2d.fromDegrees(0)));
+        redAStart = generatePath(new Pose2d(9, 2.286, Rotation2d.fromDegrees(0)), new Pose2d(7.714, 1.912, Rotation2d.fromDegrees(0)));
+        redAOne = generatePath(new Pose2d(7.714, 1.912, Rotation2d.fromDegrees(0)), new Pose2d(6.248, 3.028, Rotation2d.fromDegrees(-15)));
+        redATwo = generatePath(new Pose2d(6.248, 3.028, Rotation2d.fromDegrees(-15)), new Pose2d(5.414, 0.739, Rotation2d.fromDegrees(75)));
+        redAEnd = generatePath(new Pose2d(5.414, 0.739, Rotation2d.fromDegrees(75)), new Pose2d(.5, 1.65, Rotation2d.fromDegrees(0)));
+        
+        blueAStart = generatePath(new Pose2d(9, 2.286, Rotation2d.fromDegrees(0)), new Pose2d(7.714, 1.912, Rotation2d.fromDegrees(0)));
+        blueAOne = generatePath(new Pose2d(7.714, 1.912, Rotation2d.fromDegrees(0)), new Pose2d(6.248, 3.028, Rotation2d.fromDegrees(-15)));
+        blueATwo = generatePath(new Pose2d(6.248, 3.028, Rotation2d.fromDegrees(-15)), new Pose2d(5.414, 0.739, Rotation2d.fromDegrees(75)));
+        blueAEnd = generatePath(new Pose2d(5.414, 0.739, Rotation2d.fromDegrees(75)), new Pose2d(.5, 1.65, Rotation2d.fromDegrees(0)));
+
+        redBStart = generatePath(new Pose2d(9, 2.286, Rotation2d.fromDegrees(0)), new Pose2d(7.514, 1.524, Rotation2d.fromDegrees(50)));
+        redBOne = generatePath(new Pose2d(7.514, 1.542, Rotation2d.fromDegrees(50)), new Pose2d(6.048, 3.048, Rotation2d.fromDegrees(-50)));
+        redBTwo = generatePath(new Pose2d(6.048, 3.048, Rotation2d.fromDegrees(-50)), new Pose2d(4.066, 1.524, Rotation2d.fromDegrees(75)));
+        redBEnd = generatePath(new Pose2d(4.066, 1.524, Rotation2d.fromDegrees(75)), new Pose2d(.5, 1.65, Rotation2d.fromDegrees(0)));
       }).start();
 
       //initialized = true;
    // }
   }
-    
+  
+  public static SwerveControllerCommand generatePath(Pose2d start, Pose2d end) {
+    return generatePath(start, new Translation2d[] {}, end);
+  }
+
   public static SwerveControllerCommand generatePath(Pose2d start, Translation2d[] mid, Pose2d end) {
     ArrayList<Translation2d> interiorWaypoints = new ArrayList<Translation2d>();
 
@@ -133,22 +148,15 @@ public class AutoCommands {
   }
 
   public static Command groupARed() {
-    return redAStart.andThen(redAOne).andThen(redATwo).andThen(redAEnd);
+    return redAStart.andThen(redAOne).andThen(redATwo).andThen(new InstantCommand(() -> RobotContainer.intake.up()).alongWith(redAEnd));
   }
 
   public static Command groupABlue() {
-  //   return
-  //     groupAStart
-  //     .andThen(groupABlue)
-  //     .andThen(endGroupABlue);
     return null;
   }
 
   public static Command groupBRed() {
-      return
-        test;
-        // .andThen(groupBRed)
-        // .andThen(endGroupBRed);
+    return redBStart.andThen(redBOne).andThen(redBTwo).andThen(new InstantCommand(() -> RobotContainer.intake.up()).alongWith(redBEnd));
   }
 
   public static Command groupBBlue() {

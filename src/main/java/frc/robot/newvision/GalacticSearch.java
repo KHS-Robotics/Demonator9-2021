@@ -11,12 +11,16 @@ public class GalacticSearch {
 	// 4 expected pos/scales here
 	static Vector2d[] A1Pos = { new Vector2d(0, 0) };
 	static Vector2d[] A1Scale = { new Vector2d(0, 0) };
+	//[165.0,  149.0,  58.0,  30.0][226.0,  145.0,  16.0,  12.0][19.0,  131.0,  14.0,  9.0]
 
 	static Vector2d[] A2Pos = { new Vector2d(0, 0) };
 	static Vector2d[] A2Scale = { new Vector2d(0, 0) };
+	//[269.0,  145.0,  14.0,  10.0][96.0,  134.0,  12.0,  5.0]
+	//[272.0,  147.0,  16.0,  9.0][147.0,  136.0,  14.0,  5.0][95.0,  134.0,  6.0,  4.0]
 
 	static Vector2d[] B1Pos = { new Vector2d(0, 0) };
 	static Vector2d[] B1Scale = { new Vector2d(0, 0) };
+	//[227.0,  146.0,  18.0,  17.0][95.0,  134.0,  10.0,  6.0]
 
 	static Vector2d[] B2Pos = { new Vector2d(0, 0) };
 	static Vector2d[] B2Scale = { new Vector2d(0, 0) };
