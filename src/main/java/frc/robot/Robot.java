@@ -17,6 +17,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.vision.Limelight.LightMode;
 import frc.robot.commands.CenterSwerveModules;
+import frc.robot.newvision.GalacticSearch;
+import frc.robot.newvision.PixyHelper;
 import frc.robot.subsystems.SwerveDrive;
 import frc.robot.vision.Limelight;
 
@@ -66,7 +68,7 @@ public class Robot extends TimedRobot {
 
     RobotContainer.pixy.setLamp((byte) 1, (byte) 1);
 
-    id = (int) idChooser.getDouble(1);
+    id = GalacticSearch.CalculatePath(PixyHelper.getVectors()[0], PixyHelper.getVectors()[1]);//(int) idChooser.getDouble(1);
 
     if(RobotContainer.xboxController.getXButtonPressed()) {
       Limelight.setLedMode(LightMode.eOn);

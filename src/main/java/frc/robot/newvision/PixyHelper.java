@@ -6,6 +6,7 @@ package frc.robot.newvision;
 
 import java.util.ArrayList;
 
+import edu.wpi.first.wpilibj.drive.Vector2d;
 import frc.robot.RobotContainer;
 import frc.robot.vision.ColorBlock;
 import io.github.pseudoresonance.pixy2api.Pixy2;
@@ -43,6 +44,19 @@ public class PixyHelper {
             rtrn += blocks.get(i).getWidth() + ",  ";
             rtrn += blocks.get(i).getLength() + "]";
 
+        }
+
+        return rtrn;
+    }
+
+    public static Vector2d[][] getVectors() {
+        var blocks = getBlocks();
+        
+        Vector2d[][] rtrn = new Vector2d[2][blocks.size()];
+
+        for(int i = 0; i < blocks.size(); i++) {
+            rtrn[0][i] = new Vector2d(blocks.get(i).getX(), blocks.get(i).getY());
+            rtrn[1][i] = new Vector2d(blocks.get(i).getWidth(), blocks.get(i).getLength());
         }
 
         return rtrn;
